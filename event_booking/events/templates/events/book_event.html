@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout - {{ event.title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f4f7fe; }
+        
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4f46e5;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .checkmark-circle {
+            width: 80px;
+            height: 80px;
+            background: #22c55e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+        @keyframes scaleIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        
+        #payment-overlay { display: none; }
+        #success-state { display: none; }
+        #processing-state { display: flex; flex-direction: column; align-items: center; }
+    </style>
+</head>
+<body class="py-12 px-4">
+
+    <div id="payment-overlay" class="fixed inset-0 bg-white/95 backdrop-blur-md z-50 flex items-center justify-center">
+        <div id="processing-state">
+            <div class="loader mb-6"></div>
+            <h2 class="text-2xl font-bold text-gray-800">Processing Payment...</h2>
+            <p class="text-gray-500 mt-2">Connecting to secure server</p>
+        </div>
+
+        <div id="success-state" class="flex flex-col items-center">
+            <div class="checkmark-circle mb-6 shadow-lg shadow-green-200">
+                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h2 class="text-3xl font-black text-gray-900">Payment Done!</h2>
+            <p class="text-green-600 font-medium mt-2">Your ticket has been confirmed.</p>
+            <p class="text-gray-400 text-sm mt-8">Redirecting to Dashboard...</p>
+        </div>
+    </div>
+
+    <div class="max-w-md mx-auto bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100">
+        
+        <!-- HEADER -->
+        <div class="bg-indigo-600 p-8 text-white text-center">
+            <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Secure Payment</span>
+            <h1 class="text-2xl font-bold mt-4">{{ event.title }}</h1>
+        </div>
+
+        <!-- ✅ WEATHER SECTION ADDED -->
+        {% if weather %}
+        <div class="px-8 pt-6">
+            <div class="p-4 bg-blue-50 rounded-2xl border border-blue-100 flex items-center justify-between shadow-sm">
+                <div>
+                    <p class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Event Weather</p>
+                    <p class="text-lg font-bold text-blue-900">
+                        {{ weather.temp }}°C - {{ weather.description|title }}
+                    </p>
+                </div>
+                <img src="http://openweathermap.org/img/wn/{{ weather.icon }}@2x.png"
+                     alt="weather"
+                     class="w-14 h-14">
+            </div>
+        </div>
+        {% endif %}
+        <!-- ✅ WEATHER SECTION END -->
+
+        <div class="p-8">
+            <form id="booking-form" method="POST" action="{% url 'book_event' event.id %}" class="space-y-6">
+                {% csrf_token %}
+                
+                <input type="hidden" name="redirect_to" value="dashboard">
+
+                <div>
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-widest">Select Tickets</label>
+                    <input type="number" id="ticket-input" name="tickets" min="1" max="{{ event.tickets_available }}" value="1"
+                           class="w-full px-5 py-4 mt-2 rounded-2xl border-2 border-gray-100 focus:border-indigo-500 outline-none text-xl font-bold"
+                           oninput="updatePrice(this.value)">
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-3xl border border-gray-100">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-500 font-bold uppercase text-[10px] tracking-widest">Total Pay</span>
+                        <span class="text-2xl font-black text-indigo-700">$<span id="display-total">{{ event.price }}</span></span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Saved Card</p>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-200">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">💳</span>
+                            <span class="text-sm font-medium text-gray-600">Visa **** 4421</span>
+                        </div>
+                        <span class="text-[10px] bg-gray-200 px-2 py-1 rounded-md font-bold uppercase">Default</span>
+                    </div>
+                </div>
+
+                <button type="button" onclick="startPaymentProcess()" class="w-full bg-indigo-600 py-5 rounded-2xl text-white font-black text-lg hover:bg-indigo-700 shadow-xl shadow-indigo-200 transition-all active:scale-95">
+                    Pay & Confirm
+                </button>
+                
+                <a href="{% url 'event_list' %}" class="block text-center text-xs text-gray-400 hover:text-indigo-600 font-medium italic">Go back</a>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const unitPrice = parseFloat("{{ event.price }}");
+        
+        function updatePrice(quantity) {
+            if (quantity < 1) quantity = 1;
+            const total = (quantity * unitPrice).toFixed(2);
+            document.getElementById('display-total').innerText = total;
+        }
+
+        function startPaymentProcess() {
+            document.getElementById('payment-overlay').style.display = 'flex';
+            
+            setTimeout(() => {
+                document.getElementById('processing-state').style.display = 'none';
+                document.getElementById('success-state').style.display = 'flex';
+                
+                setTimeout(() => {
+                    document.getElementById('booking-form').submit();
+                }, 2000);
+            }, 2500);
+        }
+    </script>
+
+</body>
+</html>

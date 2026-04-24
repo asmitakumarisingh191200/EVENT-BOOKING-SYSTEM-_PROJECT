@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Events | EventHub Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
+        .event-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .event-card:hover { transform: translateY(-10px); }
+        .glass-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="text-slate-900">
+
+    <nav class="glass-nav sticky top-0 z-50 border-b border-slate-200 py-4 px-8 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold shadow-lg shadow-indigo-200">E</div>
+            <h1 class="text-xl font-bold tracking-tight text-slate-800">EventHub <span class="text-indigo-600">Pro</span></h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="{% url 'dashboard' %}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">Dashboard</a>
+            <a href="{% url 'my_bookings' %}" class="bg-indigo-50 text-indigo-600 px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-indigo-100 transition">My Bookings</a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <div class="text-center mb-16">
+            <span class="text-indigo-600 font-bold text-sm uppercase tracking-[0.2em] mb-3 block">Discover</span>
+            <h2 class="text-5xl font-black text-slate-900 mb-4">Upcoming Events</h2>
+            <p class="text-slate-500 max-w-xl mx-auto text-lg">Book your spot in the most exclusive events happening around you.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {% for event in events %}
+            <div class="event-card group bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl border border-slate-100 relative flex flex-col h-full">
+                
+                <div class="h-48 bg-slate-100 relative overflow-hidden">
+                    <img src="https://source.unsplash.com/featured/?{{ event.title|cut:' ' }},event" 
+                         alt="{{ event.title }}" 
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full shadow-sm">
+                        <span class="text-xs font-bold text-indigo-600">${{ event.price }}</span>
+                    </div>
+                </div>
+
+                <div class="p-6 flex flex-col flex-grow">
+                    <h3 class="text-xl font-bold text-slate-800 mb-3 group-hover:text-indigo-600 transition">{{ event.title }}</h3>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center gap-3 text-slate-500 text-sm">
+                            <span>📅</span>
+                            <span>{{ event.date|date:"D, d M Y" }}</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-slate-500 text-sm">
+                            <span>📍</span>
+                            <span class="truncate">{{ event.location }}</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-sm">
+                            <span>🎟️</span>
+                            <span class="font-bold {% if event.tickets_left < 20 %}text-rose-500{% else %}text-emerald-500{% endif %}">
+                                {{ event.tickets_left }} tickets left
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto">
+                        <a href="{% url 'book_event' event.id %}" 
+                           class="block w-full text-center bg-slate-900 text-white py-4 rounded-2xl font-bold text-sm hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-200 transition-all duration-300">
+                           Book Your Spot
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+</body>
+</html>

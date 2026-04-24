@@ -1,0 +1,122 @@
+[
+  {
+    "model": "events.event",
+    "pk": 1,
+    "fields": {
+      "title": "Music Concert",
+      "description": "Live evening concert featuring top artists.",
+      "date": "2026-03-10T18:00:00Z",
+      "location": "City Hall Auditorium",
+      "tickets_available": 50,
+      "price": "49.99"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 2,
+    "fields": {
+      "title": "Art Exhibition",
+      "description": "Modern art exhibition by local artists.",
+      "date": "2026-03-15T10:00:00Z",
+      "location": "Art Gallery",
+      "tickets_available": 30,
+      "price": "15.00"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 3,
+    "fields": {
+      "title": "Food Festival",
+      "description": "Taste foods from around the world.",
+      "date": "2026-03-20T12:00:00Z",
+      "location": "Central Park",
+      "tickets_available": 100,
+      "price": "10.00"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 4,
+    "fields": {
+      "title": "Tech Conference",
+      "description": "Latest trends in AI and Robotics.",
+      "date": "2026-04-05T09:00:00Z",
+      "location": "Tech Convention Center",
+      "tickets_available": 200,
+      "price": "150.00"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 5,
+    "fields": {
+      "title": "Charity Marathon",
+      "description": "Run for a cause, help local charities.",
+      "date": "2026-04-10T06:00:00Z",
+      "location": "Riverside Track",
+      "tickets_available": 150,
+      "price": "25.00"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 6,
+    "fields": {
+      "title": "Book Fair",
+      "description": "Meet authors and buy latest books.",
+      "date": "2026-04-15T11:00:00Z",
+      "location": "Community Library Hall",
+      "tickets_available": 80,
+      "price": "5.00"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 7,
+    "fields": {
+      "title": "Comedy Night",
+      "description": "Stand-up comedy evening with famous comedians.",
+      "date": "2026-04-20T19:00:00Z",
+      "location": "Comedy Club",
+      "tickets_available": 60,
+      "price": "35.00"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 8,
+    "fields": {
+      "title": "Fashion Show",
+      "description": "Showcase of latest designer collections.",
+      "date": "2026-04-25T17:00:00Z",
+      "location": "Grand Ballroom",
+      "tickets_available": 70,
+      "price": "75.00"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 9,
+    "fields": {
+      "title": "Science Workshop",
+      "description": "Fun science experiments for kids.",
+      "date": "2026-05-01T14:00:00Z",
+      "location": "Science Museum",
+      "tickets_available": 40,
+      "price": "20.00"
+    }
+  },
+  {
+    "model": "events.event",
+    "pk": 10,
+    "fields": {
+      "title": "Movie Premiere",
+      "description": "Premiere of upcoming blockbuster movie.",
+      "date": "2026-05-05T20:00:00Z",
+      "location": "City Multiplex",
+      "tickets_available": 120,
+      "price": "18.00"
+    }
+  }
+]

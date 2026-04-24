@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - EventHub Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="text-3xl font-black text-slate-900">My Bookings</h1>
+                <p class="text-slate-500 text-sm mt-1">Manage your upcoming event tickets</p>
+            </div>
+            <a href="{% url 'event_list' %}" class="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold text-sm hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100">
+                + Book More
+            </a>
+        </div>
+
+        <div class="grid gap-6">
+            {% if bookings %}
+                {% for booking in bookings %}
+                <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6 hover:shadow-md transition-all">
+                    
+                    <div class="flex items-center gap-6">
+                        <div class="bg-indigo-50 text-indigo-600 p-4 rounded-2xl text-center min-w-[80px]">
+                            <span class="block text-xs font-bold uppercase">{{ booking.event.date|date:"M" }}</span>
+                            <span class="block text-2xl font-black">{{ booking.event.date|date:"d" }}</span>
+                        </div>
+                        
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800">{{ booking.event.title }}</h2>
+                            <div class="flex flex-wrap gap-4 mt-2 text-sm text-slate-500 font-medium">
+                                <span class="flex items-center gap-1">📍 {{ booking.event.location }}</span>
+                                <span class="flex items-center gap-1">🎟️ {{ booking.tickets_booked }} Ticket{{ booking.tickets_booked|pluralize }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center md:text-right w-full md:w-auto border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-8">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                        <span class="bg-green-100 text-green-700 px-4 py-1.5 rounded-full text-xs font-bold border border-green-200">
+                            Confirmed ✅
+                        </span>
+                        <p class="text-[10px] text-slate-400 mt-3 italic">Booked on {{ booking.booked_at|date:"d M, Y" }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-20 bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
+                    <span class="text-6xl">🎟️</span>
+                    <h3 class="text-xl font-bold text-slate-800 mt-6">No Bookings Yet</h3>
+                    <p class="text-slate-500 mt-2">Explore events and grab your tickets!</p>
+                    <a href="{% url 'event_list' %}" class="inline-block mt-8 text-indigo-600 font-bold hover:underline">View All Events →</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mt-12 text-center">
+            <a href="{% url 'dashboard' %}" class="text-slate-400 text-sm font-medium hover:text-indigo-600 transition-all">← Back to Dashboard</a>
+        </div>
+    </div>
+
+</body>
+</html>
